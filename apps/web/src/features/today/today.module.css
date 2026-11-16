@@ -12,32 +12,35 @@
 .heroPlain {
   grid-template-columns: 1fr;
 }
-.glass {
+.gauge {
   width: 100%;
-  max-width: 190px;
+  max-width: 180px;
   height: auto;
   justify-self: center;
   overflow: visible;
 }
-.waveFront {
-  animation: drift 3.2s linear infinite;
+.stream {
+  animation: pour 0.5s linear infinite;
 }
-.waveBack {
-  animation: drift 5.5s linear infinite reverse;
+@keyframes pour {
+  to { stroke-dashoffset: -10; }
 }
-@keyframes drift {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100px); }
+.grain1,
+.grain2 {
+  animation: fall 1.5s cubic-bezier(0.5, 0, 0.9, 0.6) infinite;
 }
-.b1, .b2, .b3 {
-  animation: rise 3.4s ease-in infinite;
+.grain2 {
+  animation-delay: 0.75s;
 }
-.b2 { animation-delay: 1.1s; animation-duration: 4.1s; }
-.b3 { animation-delay: 2s; animation-duration: 2.9s; }
-@keyframes rise {
-  0% { transform: translateY(0); opacity: 0; }
-  15% { opacity: 1; }
-  100% { transform: translateY(-150px); opacity: 0; }
+@keyframes fall {
+  0% { transform: translateY(-6px) rotate(0deg); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translateY(96px) rotate(140deg); opacity: 1; }
+}
+.grain1,
+.grain2 {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 .figure {
   display: grid;

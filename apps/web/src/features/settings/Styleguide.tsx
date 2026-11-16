@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Card, Chip, GiChip, Logo, Segmented, Sheet, Slider, SourceBadge } from '@/ui';
 import { layout as l, Page } from '@/ui/Page';
-import { GlassGauge } from '../today/GlassGauge';
+import { SugarHourglass } from '../today/SugarHourglass';
 import s from './settings.module.css';
 
 const SWATCHES = ['cream', 'paper', 'ink', 'ink-soft', 'terracotta', 'honey', 'sage', 'plum'];
@@ -60,8 +60,8 @@ export default function Styleguide() {
       <Card>
         <div className={l.stack}>
           <h2 className={l.h2}>Jauge du jour</h2>
-          <div style={{ width: 180, margin: '0 auto' }}>
-            <GlassGauge ratio={ratio} label="Démo de jauge" />
+          <div style={{ width: 170, margin: '0 auto' }}>
+            <SugarHourglass ratio={ratio} label="Démo de jauge" />
           </div>
           <Slider label="Remplissage" value={Math.round(ratio * 100)} min={0} max={100} unit="%" onChange={(v) => setRatio(v / 100)} />
         </div>

@@ -10,7 +10,7 @@ import { fmt } from '@/lib/nutrition';
 import { Chip, cx, ICON, Logo } from '@/ui';
 import { layout as l, Page } from '@/ui/Page';
 import { EntryRow } from '../history/EntryRow';
-import { GlassGauge } from './GlassGauge';
+import { SugarHourglass } from './SugarHourglass';
 import s from './today.module.css';
 
 export function restMessage(total: number, goal: number): string {
@@ -39,7 +39,7 @@ export function Today() {
     >
       <h1 className="sr-only">Aujourd'hui</h1>
       <section className={cx(s.hero, !goal && s.heroPlain)} aria-label="Glucides du jour">
-        {goal ? <GlassGauge ratio={total / goal} label={`${fmt(total)} g de glucides sur un objectif de ${goal} g`} /> : null}
+        {goal ? <SugarHourglass ratio={total / goal} label={`${fmt(total)} g de glucides sur un objectif de ${goal} g`} /> : null}
         <div className={s.figure}>
           <span className={l.eyebrow}>{dateLabel}</span>
           <span className={s.heroNum} data-testid="today-total">
