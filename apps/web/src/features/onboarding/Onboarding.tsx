@@ -34,7 +34,7 @@ export function Onboarding() {
   const goalValid = Number(goal) >= 10 && Number(goal) <= 1000;
 
   return (
-    <div className={s.wrap}>
+    <main className={s.wrap}>
       <div className={s.dots} role="img" aria-label={`Étape ${step + 1} sur 3`}>
         {[0, 1, 2].map((i) => (
           <span key={i} className={cx(s.dot, i === step && s.dotOn)} />
@@ -114,6 +114,6 @@ export function Onboarding() {
           </>
         )}
       </div>
-    </div>
+    </main>
   );
 }

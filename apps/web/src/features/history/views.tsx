@@ -196,7 +196,7 @@ export function MonthGrid({ entries, month, goal, onPickDay }: { entries: Entry[
             onClick={() => onPickDay(day)}
           >
             {total > 0 && <span className={s.calFill} style={{ opacity: 0.15 + 0.75 * Math.min(1, total / max) }} />}
-            <span className={s.calNum}>{i + 1}</span>
+            <span className={cx(s.calNum, total > 0 && s.calNumOn)}>{i + 1}</span>
           </button>
         );
       })}

@@ -40,7 +40,7 @@ export function GlassGauge({ ratio, label }: { ratio: number; label: string }) {
           </g>
         )}
       </g>
-      <path d="M150 34 L138 176" stroke="var(--paper)" strokeWidth="6" strokeLinecap="round" opacity="0.5" />
+      <path d="M150 34 L138 176" stroke="#fffaf2" strokeWidth="6" strokeLinecap="round" opacity="0.5" />
       <path d={GLASS} fill="none" stroke="var(--ink)" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );

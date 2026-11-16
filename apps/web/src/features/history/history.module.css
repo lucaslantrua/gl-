@@ -152,9 +152,22 @@
 }
 .calNum {
   position: relative;
+  min-width: 24px;
+  padding: 1px 4px;
+  border-radius: 8px;
+  text-align: center;
 }
-.calOver {
-  box-shadow: inset 0 0 0 2.5px var(--plum);
+/* Pastille opaque sous le chiffre : lisible quelle que soit l'intensité de la case, dans les deux thèmes. */
+.calNumOn {
+  background: var(--paper);
+}
+/* Anneau au-dessus du remplissage : jour au-dessus de l'objectif. */
+.calOver::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 3px var(--plum);
 }
 .calToday .calNum {
   text-decoration: underline;

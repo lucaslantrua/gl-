@@ -108,7 +108,7 @@ export default function EntryEditor() {
   }
 
   return (
-    <div className={s.wrap}>
+    <main className={s.wrap}>
       <header className={cx(l.row, l.between)}>
         <div className={l.row}>
           <IconButton label="Retour" onClick={close}>
@@ -243,6 +243,6 @@ export default function EntryEditor() {
           </Button>
         </div>
       </Sheet>
-    </div>
+    </main>
   );
 }

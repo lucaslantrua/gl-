@@ -161,7 +161,7 @@ export default function Scan() {
   };
 
   return (
-    <div className={s.root}>
+    <main className={s.root}>
       <video ref={videoRef} className={s.video} playsInline muted aria-hidden />
       <h1 className="sr-only">Scanner</h1>
 
@@ -272,6 +272,6 @@ export default function Scan() {
           </Button>
         </div>
       </Sheet>
-    </div>
+    </main>
   );
 }
