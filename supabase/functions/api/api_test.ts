@@ -1,11 +1,10 @@
 import { assertEquals, assertMatch, assertRejects } from '@std/assert';
 import { createApp, type Deps } from './app.ts';
-import { loadConfig, parseRateLimit, type Config } from './config.ts';
+import { loadConfig, parseRateLimit } from './config.ts';
 import { MemoryCache, normalise, type Product } from './off.ts';
 import { PROMPTS } from './prompts.ts';
-import { createAnthropicClient, createAnthropicProvider } from './providers/anthropic.ts';
 import { createOpenAiProvider } from './providers/openai.ts';
-import { giCategory, InvalidModelOutput, LabelWire, normaliseLabel, normalisePlate } from './schemas.ts';
+import { giCategory, InvalidModelOutput, normaliseLabel, normalisePlate } from './schemas.ts';
 import { render } from './sync_prompts.ts';
 import { extractJson, sniff, type VisionProvider, type VisionRequest } from './vision.ts';
 
@@ -197,11 +196,10 @@ Deno.test('route inconnue → 404', async () => {
   assertEquals((await app().handler(get('/api/nope'))).status, 404);
 });
 
-Deno.test('configuration : fournisseur et modèle par défaut', () => {
-  assertEquals([env().visionProvider, env().visionModel], ['openai', 'gpt-4o-mini']);
-  const claude = env({ ANTHROPIC_API_KEY: 'k' });
-  assertEquals([claude.visionProvider, claude.visionModel], ['anthropic', 'claude-opus-5-5']);
-  assertEquals(env({ ANTHROPIC_API_KEY: 'k', VISION_PROVIDER: 'openai', VISION_JSON_MODE: 'false' }).visionJsonMode, false);
+Deno.test('configuration : valeurs par défaut et URL de base nettoyée', () => {
+  assertEquals([env().visionModel, env().visionApiBaseUrl, env().visionJsonMode], ['gpt-4o-mini', 'https://api.openai.com/v1', true]);
+  const gemini = env({ VISION_API_BASE_URL: 'https://generativelanguage.googleapis.com/v1beta/openai/', VISION_MODEL: 'gemini-x', VISION_JSON_MODE: 'false' });
+  assertEquals([gemini.visionApiBaseUrl, gemini.visionModel, gemini.visionJsonMode], ['https://generativelanguage.googleapis.com/v1beta/openai', 'gemini-x', false]);
 });
 
 Deno.test('validation : schémas et utilitaires', () => {
@@ -234,40 +232,7 @@ function capture(reply: unknown, status = 200) {
   return { requests, impl };
 }
 
-const ASK: VisionRequest = { kind: 'label', system: PROMPTS.label, schema: LabelWire, image: JPEG, mediaType: 'image/jpeg' };
-
-Deno.test('Claude : image en base64, schéma de sortie, repli sur refus', async () => {
-  const config: Config = env({ ANTHROPIC_API_KEY: 'sk-test', VISION_EFFORT: 'low' });
-  const { requests, impl } = capture({
-    id: 'msg_1', type: 'message', role: 'assistant', model: 'claude-opus-5-5', stop_reason: 'end_turn', stop_sequence: null,
-    content: [{ type: 'thinking', thinking: '', signature: 's' }, { type: 'text', text: JSON.stringify(LABEL) }],
-    usage: { input_tokens: 10, output_tokens: 10 },
-  });
-  const text = await createAnthropicProvider(config, createAnthropicClient(config, impl)).ask(ASK);
-  assertEquals(JSON.parse(text), LABEL);
-
-  const { url, headers, body } = requests[0]!;
-  assertMatch(url, /\/v1\/messages/);
-  // Le SDK choisit l'en-tête d'authentification : on vérifie seulement que la clé part bien.
-  assertMatch(`${headers.get('x-api-key')} ${headers.get('authorization')}`, /sk-test/);
-  assertMatch(headers.get('anthropic-beta')!, /server-side-fallback-2026-07-01/);
-  assertEquals([body.model, body.fallbacks, body.system], ['claude-opus-5-5', 'default', PROMPTS.label]);
-  const output = body.output_config as { effort: string; format: { type: string } };
-  assertEquals([output.effort, output.format.type], ['low', 'json_schema']);
-  const content = (body.messages as { content: { type: string; source?: { type: string; media_type: string } }[] }[])[0]!.content;
-  assertEquals([content[0]!.type, content[0]!.source!.type, content[0]!.source!.media_type, content[1]!.type], ['image', 'base64', 'image/jpeg', 'text']);
-  assertEquals('thinking' in body || 'temperature' in body, false);
-});
-
-Deno.test('Claude : refus → réponse inexploitable ; erreur API → service indisponible ; Haiku sans repli', async () => {
-  const config = env({ ANTHROPIC_API_KEY: 'sk-test', VISION_MODEL: 'claude-haiku-5-5' });
-  const refusal = capture({ id: 'm', type: 'message', role: 'assistant', model: 'claude-haiku-5-5', stop_reason: 'refusal', stop_sequence: null, content: [], usage: { input_tokens: 1, output_tokens: 0 } });
-  await assertRejects(() => createAnthropicProvider(config, createAnthropicClient(config, refusal.impl)).ask(ASK), Error, 'refusal');
-  assertEquals('fallbacks' in refusal.requests[0]!.body, false);
-
-  const denied = capture({ type: 'error', error: { type: 'authentication_error', message: 'invalid x-api-key' } }, 401);
-  await assertRejects(() => createAnthropicProvider(config, createAnthropicClient(config, denied.impl)).ask(ASK), Error, 'authentication');
-});
+const ASK: VisionRequest = { kind: 'label', system: PROMPTS.label, image: JPEG, mediaType: 'image/jpeg' };
 
 Deno.test('compatible OpenAI : image en data URL, mode JSON, message de correction au retry', async () => {
   const config = env({ VISION_API_KEY: 'k', VISION_API_BASE_URL: 'https://llm.example/v1/' });
@@ -276,7 +241,7 @@ Deno.test('compatible OpenAI : image en data URL, mode JSON, message de correcti
   assertEquals(JSON.parse(await provider.ask({ ...ASK, retry: { previous: 'bof', error: 'per100.carbs: must be between 0 and 100' } })), LABEL);
   const { url, headers, body } = requests[0]!;
   assertEquals([url, headers.get('authorization')], ['https://llm.example/v1/chat/completions', 'Bearer k']);
-  assertEquals(body.response_format, { type: 'json_object' });
+  assertEquals([body.response_format, body.max_tokens], [{ type: 'json_object' }, 4096]);
   const messages = body.messages as { role: string; content: unknown }[];
   assertEquals(messages.map((m) => m.role), ['system', 'user', 'assistant', 'user']);
   assertMatch(String(messages[3]!.content), /per100\.carbs/);

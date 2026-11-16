@@ -8,8 +8,8 @@ export function giCategory(gi: number): GiCategory {
 }
 
 /* ---------- Ce que le modèle doit renvoyer ----------
- * Schémas volontairement sans bornes numériques : ils servent aussi de schéma de sortie structurée.
- * Les bornes et la cohérence sont vérifiées ensuite par normalisePlate / normaliseLabel. */
+ * Schémas de forme uniquement : les bornes et la cohérence sont vérifiées ensuite
+ * par normalisePlate / normaliseLabel. */
 
 const num = z.number().nullable();
 

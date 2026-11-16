@@ -26,7 +26,8 @@ export function createOpenAiProvider(config: Config, fetchImpl: typeof fetch = f
             model: config.visionModel,
             messages,
             temperature: 0.2,
-            max_tokens: 1500,
+            // Marge pour les modèles qui raisonnent avant de répondre : leurs tokens de réflexion comptent dans ce plafond.
+            max_tokens: 4096,
             ...(config.visionJsonMode ? { response_format: { type: 'json_object' } } : {}),
           }),
           signal: AbortSignal.timeout(30_000),

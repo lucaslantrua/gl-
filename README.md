@@ -72,7 +72,7 @@ npx supabase login
 ```
 
 ```bash
-cp supabase/.env.example supabase/.env   # renseigner ANTHROPIC_API_KEY et ALLOWED_ORIGINS
+cp supabase/.env.example supabase/.env   # renseigner VISION_API_KEY et ALLOWED_ORIGINS
 npx supabase secrets set --env-file supabase/.env --project-ref aphyftissweqozxxxmra
 ```
 
@@ -82,10 +82,7 @@ npx supabase functions deploy api --project-ref aphyftissweqozxxxmra
 
 Côté front, copier `apps/web/.env.example` en `apps/web/.env` et y mettre la clé publique « anon » du projet.
 
-Deux fournisseurs de vision sont possibles (`VISION_PROVIDER`) :
-
-- `anthropic` (par défaut dès qu'`ANTHROPIC_API_KEY` est définie) : API Claude via le SDK officiel, avec une sortie JSON contrainte par schéma. `VISION_MODEL` vaut `claude-opus-5-5` par défaut ; `claude-sonnet-5-5` et `claude-haiku-5-5` sont moins chers.
-- `openai` : toute API compatible OpenAI, comme le FastAPI.
+Le modèle vision est appelé par une API compatible OpenAI, réglable par trois secrets (`VISION_API_BASE_URL`, `VISION_API_KEY`, `VISION_MODEL`). Le réglage conseillé est Gemini, via `https://generativelanguage.googleapis.com/v1beta/openai` : la gamme Flash-Lite pour le coût, Flash pour la précision.
 
 Limites à connaître : le cache Open Food Facts et la limite par IP vivent en mémoire, le temps d'une instance de la fonction. Le front garde de toute façon sa propre copie des produits scannés.
 

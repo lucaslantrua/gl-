@@ -1,9 +1,6 @@
 /** Configuration lue dans les secrets de la fonction. */
 export interface Config {
-  visionProvider: 'anthropic' | 'openai';
-  anthropicApiKey: string;
   visionModel: string;
-  visionEffort: string;
   visionApiBaseUrl: string;
   visionApiKey: string;
   visionJsonMode: boolean;
@@ -25,14 +22,8 @@ export function parseRateLimit(value: string | undefined): { max: number; window
 }
 
 export function loadConfig(env: (name: string) => string | undefined): Config {
-  const anthropicApiKey = env('ANTHROPIC_API_KEY') ?? '';
-  const provider = (env('VISION_PROVIDER') ?? '').trim().toLowerCase();
-  const visionProvider = provider === 'openai' || provider === 'anthropic' ? provider : anthropicApiKey ? 'anthropic' : 'openai';
   return {
-    visionProvider,
-    anthropicApiKey,
-    visionModel: env('VISION_MODEL') || (visionProvider === 'anthropic' ? 'claude-opus-5-5' : 'gpt-4o-mini'),
-    visionEffort: (env('VISION_EFFORT') ?? '').trim().toLowerCase(),
+    visionModel: env('VISION_MODEL') || 'gpt-4o-mini',
     visionApiBaseUrl: (env('VISION_API_BASE_URL') || 'https://api.openai.com/v1').replace(/\/+$/, ''),
     visionApiKey: env('VISION_API_KEY') ?? '',
     visionJsonMode: !['0', 'false', 'no', 'off'].includes((env('VISION_JSON_MODE') ?? 'true').trim().toLowerCase()),

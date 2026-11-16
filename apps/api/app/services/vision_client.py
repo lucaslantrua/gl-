@@ -67,7 +67,8 @@ async def _complete(http: httpx.AsyncClient, settings: Settings, messages: list[
         "model": settings.vision_model,
         "messages": messages,
         "temperature": 0.2,
-        "max_tokens": 1500,
+        # Headroom for models that reason first: their thinking tokens count against this cap.
+        "max_tokens": 4096,
     }
     if settings.vision_json_mode:
         payload["response_format"] = {"type": "json_object"}

@@ -1,8 +1,7 @@
 /** Analyse d'image : lecture du fichier, appel du modèle, validation, un seul retry. L'image reste en mémoire. */
 import { MAX_IMAGE_BYTES } from './config.ts';
 import { PROMPTS } from './prompts.ts';
-import { InvalidModelOutput, LabelWire, normaliseLabel, normalisePlate, PlateWire, type LabelResponse, type PlateResponse } from './schemas.ts';
-import type { z } from 'zod';
+import { InvalidModelOutput, normaliseLabel, normalisePlate, type LabelResponse, type PlateResponse } from './schemas.ts';
 
 export type Kind = 'plate' | 'label';
 export type MediaType = 'image/jpeg' | 'image/webp';
@@ -10,7 +9,6 @@ export type MediaType = 'image/jpeg' | 'image/webp';
 export interface VisionRequest {
   kind: Kind;
   system: string;
-  schema: z.ZodType;
   image: Uint8Array;
   mediaType: MediaType;
   /** Présent au second essai : la réponse rejetée et la raison. */
@@ -100,11 +98,11 @@ async function analyse<T>(provider: VisionProvider, base: Omit<VisionRequest, 'r
 }
 
 export function analysePlate(provider: VisionProvider, image: Uint8Array, mediaType: MediaType): Promise<PlateResponse> {
-  return analyse(provider, { kind: 'plate', system: PROMPTS.plate, schema: PlateWire, image, mediaType }, normalisePlate);
+  return analyse(provider, { kind: 'plate', system: PROMPTS.plate, image, mediaType }, normalisePlate);
 }
 
 export function analyseLabel(provider: VisionProvider, image: Uint8Array, mediaType: MediaType): Promise<LabelResponse> {
-  return analyse(provider, { kind: 'label', system: PROMPTS.label, schema: LabelWire, image, mediaType }, normaliseLabel);
+  return analyse(provider, { kind: 'label', system: PROMPTS.label, image, mediaType }, normaliseLabel);
 }
 
 export function toBase64(bytes: Uint8Array): string {
