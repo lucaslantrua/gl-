@@ -1,0 +1,6 @@
+# Projet Supabase de Glu. Seules les Edge Functions sont utilisées : aucune table, aucun stockage.
+project_id = "aphyftissweqozxxxmra"
+
+[functions.api]
+# L'appel doit porter la clé publique (anon) du projet : une première barrière contre l'usage sauvage du proxy.
+verify_jwt = true

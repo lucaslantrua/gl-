@@ -24,11 +24,13 @@ apps/
     src/ui         composants du design system
     src/styles     tokens.css, global.css
     e2e            tests Playwright
-  api/   backend FastAPI (proxy vision + Open Food Facts)
+  api/   backend FastAPI (proxy vision + Open Food Facts), pour le local et l'auto-hébergement
     app/routes     vision.py, products.py, health.py
     app/services   vision_client.py, off_client.py, cache.py
-    app/prompts    plate.md, label.md
+    app/prompts    plate.md, label.md (source de référence des prompts)
     tests          pytest + fixtures
+supabase/
+  functions/api/   le même backend en Edge Function Supabase (Deno), pour la production
 docker-compose.yml
 ```
 
@@ -61,7 +63,35 @@ docker compose up --build                # http://localhost:8080
 
 Redis est optionnel : `docker compose --profile redis up` avec `REDIS_URL=redis://redis:6379/0`. Sans Redis, le cache est en mémoire (LRU, 7 jours pour Open Food Facts).
 
-### Variables d'environnement (backend)
+### Backend sur Supabase
+
+La fonction `supabase/functions/api` expose les mêmes routes et le même contrat que le FastAPI. Elle n'utilise ni table ni stockage : c'est un proxy sans état.
+
+```bash
+npx supabase login
+```
+
+```bash
+cp supabase/.env.example supabase/.env   # renseigner ANTHROPIC_API_KEY et ALLOWED_ORIGINS
+npx supabase secrets set --env-file supabase/.env --project-ref aphyftissweqozxxxmra
+```
+
+```bash
+npx supabase functions deploy api --project-ref aphyftissweqozxxxmra
+```
+
+Côté front, copier `apps/web/.env.example` en `apps/web/.env` et y mettre la clé publique « anon » du projet.
+
+Deux fournisseurs de vision sont possibles (`VISION_PROVIDER`) :
+
+- `anthropic` (par défaut dès qu'`ANTHROPIC_API_KEY` est définie) : API Claude via le SDK officiel, avec une sortie JSON contrainte par schéma. `VISION_MODEL` vaut `claude-opus-5-5` par défaut ; `claude-sonnet-5-5` et `claude-haiku-5-5` sont moins chers.
+- `openai` : toute API compatible OpenAI, comme le FastAPI.
+
+Limites à connaître : le cache Open Food Facts et la limite par IP vivent en mémoire, le temps d'une instance de la fonction. Le front garde de toute façon sa propre copie des produits scannés.
+
+Si les prompts changent dans `apps/api/app/prompts/`, régénérer leur copie avec `deno task sync-prompts` (un test échoue tant que ce n'est pas fait).
+
+### Variables d'environnement (backend FastAPI)
 
 | Variable | Rôle | Défaut |
 | --- | --- | --- |
@@ -82,6 +112,7 @@ Côté front, `VITE_API_BASE` permet de pointer vers un backend sur un autre dom
 cd apps/web && npm test            # Vitest : calculs, agrégations, règles de reco, contrastes AA, garde-fous
 cd apps/web && npm run e2e         # Playwright sur le build PWA : scan, ajout manuel, hors ligne, accessibilité (axe)
 cd apps/api && .venv/bin/pytest    # pytest : Open Food Facts et modèle vision mockés
+cd supabase/functions/api && deno task test   # Edge Function : routes, validation, requêtes envoyées aux modèles
 ```
 
 Les photos de `apps/api/tests/fixtures/` sont des images de synthèse en attendant de vraies photos (voir le README du dossier).

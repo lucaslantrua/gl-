@@ -2,6 +2,9 @@ import { db } from '@/db/db';
 import type { GiCategory, OffProduct } from '@/db/types';
 
 const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? '';
+/** Clé publique (anon) du projet Supabase, exigée par ses Edge Functions. Absente avec le backend FastAPI. */
+const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+const AUTH: Record<string, string> = ANON_KEY ? { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}` } : {};
 const LOCAL_PRODUCT_TTL_MS = 30 * 86_400_000;
 
 export class ApiError extends Error {
@@ -53,7 +56,7 @@ const FALLBACK: Record<number, string> = {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
-    res = await fetch(`${BASE}${path}`, init);
+    res = await fetch(`${BASE}${path}`, { ...init, headers: { ...AUTH, ...(init?.headers ?? {}) } });
   } catch {
     throw new ApiError(0, "Pas de connexion. Tu peux quand même ajouter l'aliment à la main.");
   }

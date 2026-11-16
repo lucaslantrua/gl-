@@ -1,0 +1,12 @@
+{
+  "imports": {
+    "@anthropic-ai/sdk": "npm:@anthropic-ai/sdk@^1",
+    "@anthropic-ai/sdk/": "npm:/@anthropic-ai/sdk@^1/",
+    "zod": "npm:zod@^4",
+    "@std/assert": "jsr:@std/assert@^1"
+  },
+  "tasks": {
+    "test": "deno test --allow-read --allow-env",
+    "sync-prompts": "deno run --allow-read --allow-write sync_prompts.ts"
+  }
+}
