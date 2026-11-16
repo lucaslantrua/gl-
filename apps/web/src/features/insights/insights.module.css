@@ -1,0 +1,41 @@
+.card {
+  display: grid;
+  gap: var(--s-3);
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: var(--honey);
+}
+.positive::before {
+  background: var(--sage);
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-3);
+}
+.title {
+  font-size: 1.3rem;
+}
+.alt {
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-sm);
+  background: var(--sage-wash);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+.evidence {
+  white-space: normal;
+  height: auto;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  justify-self: start;
+}
