@@ -232,3 +232,24 @@ def test_label_invalid_json_retry(client, mock_http, label_jpeg):
     ]
     assert upload(client, "/api/vision/label", label_jpeg).status_code == 200
     assert route.call_count == 2
+
+
+def test_null_unit_from_model_defaults_to_grams():
+    """An unreadable label comes back with null everywhere, unit included."""
+    from app.schemas import LabelExtraction, PlateItem
+
+    label = LabelExtraction.model_validate(
+        {"per100": {"carbs": None, "sugars": None, "fiber": None, "protein": None, "fat": None}, "servingQuantity": None, "unit": None, "name": None}
+    )
+    assert label.unit == "g" and label.per100.carbs is None
+    item = PlateItem.model_validate({"name": "Riz", "estimatedQuantityG": 150, "unit": None, "carbsG": 40, "carbsMinG": 30, "carbsMaxG": 50})
+    assert item.unit == "g"
+
+
+def test_reasoning_effort_is_sent_only_when_configured(monkeypatch):
+    from app.config import load_settings
+
+    monkeypatch.delenv("VISION_REASONING_EFFORT", raising=False)
+    assert load_settings().vision_reasoning_effort == ""
+    monkeypatch.setenv("VISION_REASONING_EFFORT", " None ")
+    assert load_settings().vision_reasoning_effort == "none"

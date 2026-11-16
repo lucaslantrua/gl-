@@ -82,7 +82,8 @@ const optional = (v: number | null | undefined, max: number): number | null => (
 /** Tolérant sur la forme (champs optionnels absents), strict sur les valeurs. */
 export function normalisePlate(raw: unknown): PlateResponse {
   const loose = PlateWire.extend({
-    items: z.array(PlateWire.shape.items.element.partial({ unit: true, sugarsG: true, fiberG: true, proteinG: true, fatG: true, glycemicIndex: true, box: true })),
+    // Les modèles répondent parfois null pour un champ qu'ils jugent inconnu, y compris l'unité.
+    items: z.array(PlateWire.shape.items.element.partial({ sugarsG: true, fiberG: true, proteinG: true, fatG: true, glycemicIndex: true, box: true }).extend({ unit: z.enum(['g', 'ml']).nullish() })),
     notes: z.string().optional(),
     overallConfidence: PlateWire.shape.overallConfidence.optional(),
   }).safeParse(raw);
@@ -121,8 +122,8 @@ export function normalisePlate(raw: unknown): PlateResponse {
 }
 
 export function normaliseLabel(raw: unknown): LabelResponse {
-  const loose = LabelWire.partial({ name: true, unit: true, servingQuantity: true })
-    .extend({ per100: LabelWire.shape.per100.partial() })
+  const loose = LabelWire.partial({ name: true, servingQuantity: true })
+    .extend({ unit: z.enum(['g', 'ml']).nullish(), per100: LabelWire.shape.per100.partial() })
     .safeParse(raw);
   if (!loose.success) throw new InvalidModelOutput(z.prettifyError(loose.error).slice(0, 400));
   const d = loose.data;

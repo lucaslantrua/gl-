@@ -19,10 +19,11 @@ def _bool(value: str | None, default: bool) -> bool:
 
 @dataclass(frozen=True)
 class Settings:
-    vision_api_base_url: str = "https://api.openai.com/v1"
+    vision_api_base_url: str = "https://api.scaleway.ai/v1"
     vision_api_key: str = ""
-    vision_model: str = "gpt-4o-mini"
+    vision_model: str = "gemma-4-26b-a4b-it"
     vision_json_mode: bool = True
+    vision_reasoning_effort: str = ""
     off_user_agent: str = "Glu/0.1 (contact@example.com)"
     redis_url: str = ""
     allowed_origins: list[str] = field(default_factory=lambda: ["http://localhost:5173"])
@@ -33,10 +34,11 @@ def load_settings() -> Settings:
     env = os.environ
     origins = [o.strip() for o in env.get("ALLOWED_ORIGINS", "http://localhost:5173").split(",") if o.strip()]
     return Settings(
-        vision_api_base_url=(env.get("VISION_API_BASE_URL") or "https://api.openai.com/v1").rstrip("/"),
+        vision_api_base_url=(env.get("VISION_API_BASE_URL") or "https://api.scaleway.ai/v1").rstrip("/"),
         vision_api_key=env.get("VISION_API_KEY", ""),
-        vision_model=env.get("VISION_MODEL") or "gpt-4o-mini",
+        vision_model=env.get("VISION_MODEL") or "gemma-4-26b-a4b-it",
         vision_json_mode=_bool(env.get("VISION_JSON_MODE"), True),
+        vision_reasoning_effort=env.get("VISION_REASONING_EFFORT", "").strip().lower(),
         off_user_agent=env.get("OFF_USER_AGENT") or "Glu/0.1 (contact@example.com)",
         redis_url=env.get("REDIS_URL", "").strip(),
         allowed_origins=origins,

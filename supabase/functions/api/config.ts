@@ -4,6 +4,7 @@ export interface Config {
   visionApiBaseUrl: string;
   visionApiKey: string;
   visionJsonMode: boolean;
+  visionReasoningEffort: string;
   offUserAgent: string;
   allowedOrigins: string[];
   rateLimit: { max: number; windowMs: number };
@@ -23,10 +24,11 @@ export function parseRateLimit(value: string | undefined): { max: number; window
 
 export function loadConfig(env: (name: string) => string | undefined): Config {
   return {
-    visionModel: env('VISION_MODEL') || 'gpt-4o-mini',
-    visionApiBaseUrl: (env('VISION_API_BASE_URL') || 'https://api.openai.com/v1').replace(/\/+$/, ''),
+    visionModel: env('VISION_MODEL') || 'gemma-4-26b-a4b-it',
+    visionApiBaseUrl: (env('VISION_API_BASE_URL') || 'https://api.scaleway.ai/v1').replace(/\/+$/, ''),
     visionApiKey: env('VISION_API_KEY') ?? '',
     visionJsonMode: !['0', 'false', 'no', 'off'].includes((env('VISION_JSON_MODE') ?? 'true').trim().toLowerCase()),
+    visionReasoningEffort: (env('VISION_REASONING_EFFORT') ?? '').trim().toLowerCase(),
     offUserAgent: env('OFF_USER_AGENT') || 'Glu/0.1 (contact@example.com)',
     allowedOrigins: (env('ALLOWED_ORIGINS') || 'http://localhost:5173').split(',').map((o) => o.trim()).filter(Boolean),
     rateLimit: parseRateLimit(env('RATE_LIMIT')),

@@ -72,6 +72,9 @@ async def _complete(http: httpx.AsyncClient, settings: Settings, messages: list[
     }
     if settings.vision_json_mode:
         payload["response_format"] = {"type": "json_object"}
+    if settings.vision_reasoning_effort:
+        # e.g. "none" skips the model's reasoning phase: much faster, at some cost in care.
+        payload["reasoning_effort"] = settings.vision_reasoning_effort
     headers = {"Content-Type": "application/json"}
     if settings.vision_api_key:
         headers["Authorization"] = f"Bearer {settings.vision_api_key}"

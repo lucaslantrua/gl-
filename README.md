@@ -82,7 +82,7 @@ npx supabase functions deploy api --project-ref aphyftissweqozxxxmra
 
 Côté front, copier `apps/web/.env.example` en `apps/web/.env` et y mettre la clé publique « anon » du projet.
 
-Le modèle vision est appelé par une API compatible OpenAI, réglable par trois secrets (`VISION_API_BASE_URL`, `VISION_API_KEY`, `VISION_MODEL`). Le réglage conseillé est Gemini, via `https://generativelanguage.googleapis.com/v1beta/openai` : la gamme Flash-Lite pour le coût, Flash pour la précision.
+Le modèle vision est appelé par une API compatible OpenAI, réglable par trois secrets (`VISION_API_BASE_URL`, `VISION_API_KEY`, `VISION_MODEL`). Par défaut : `gemma-4-26b-a4b-it` chez Scaleway Generative APIs (`https://api.scaleway.ai/v1`), hébergé en Europe.
 
 Limites à connaître : le cache Open Food Facts et la limite par IP vivent en mémoire, le temps d'une instance de la fonction. Le front garde de toute façon sa propre copie des produits scannés.
 
@@ -92,9 +92,10 @@ Si les prompts changent dans `apps/api/app/prompts/`, régénérer leur copie av
 
 | Variable | Rôle | Défaut |
 | --- | --- | --- |
-| `VISION_API_BASE_URL` | API compatible OpenAI (OpenAI, LiteLLM, vLLM…) | `https://api.openai.com/v1` |
+| `VISION_API_BASE_URL` | API compatible OpenAI (Scaleway, Gemini, OpenAI, vLLM…) | `https://api.scaleway.ai/v1` |
 | `VISION_API_KEY` | Clé du modèle vision | |
-| `VISION_MODEL` | Nom du modèle | `gpt-4o-mini` |
+| `VISION_MODEL` | Nom du modèle | `gemma-4-26b-a4b-it` |
+| `VISION_REASONING_EFFORT` | Optionnel. `none` saute la phase de réflexion du modèle (plus rapide) | |
 | `VISION_JSON_MODE` | Envoie `response_format=json_object` ; à couper si le serveur le refuse | `true` |
 | `OFF_USER_AGENT` | User-Agent exigé par Open Food Facts | `Glu/0.1 (contact@example.com)` |
 | `REDIS_URL` | Cache Redis, optionnel | |

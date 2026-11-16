@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 GiCategory = Literal["low", "medium", "high"]
 Unit = Literal["g", "ml"]
@@ -77,6 +77,12 @@ class PlateItem(BaseModel):
     giCategory: Optional[GiCategory] = None
     box: Optional[Box] = None
 
+    @field_validator("unit", mode="before")
+    @classmethod
+    def _unit_default(cls, value: object) -> object:
+        # Models sometimes answer null for a field they consider unknown.
+        return "g" if value is None else value
+
     @model_validator(mode="after")
     def _coherent(self) -> "PlateItem":
         # The range must always contain the central estimate.
@@ -117,6 +123,12 @@ class LabelExtraction(BaseModel):
     servingQuantity: Optional[float] = Field(default=None, gt=0, le=5000)
     unit: Unit = "g"
     name: Optional[str] = Field(default=None, max_length=120)
+
+    @field_validator("unit", mode="before")
+    @classmethod
+    def _unit_default(cls, value: object) -> object:
+        # An unreadable label yields null everywhere, unit included.
+        return "g" if value is None else value
 
 
 class LabelResponse(LabelExtraction):

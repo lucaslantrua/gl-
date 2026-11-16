@@ -197,7 +197,7 @@ Deno.test('route inconnue → 404', async () => {
 });
 
 Deno.test('configuration : valeurs par défaut et URL de base nettoyée', () => {
-  assertEquals([env().visionModel, env().visionApiBaseUrl, env().visionJsonMode], ['gpt-4o-mini', 'https://api.openai.com/v1', true]);
+  assertEquals([env().visionModel, env().visionApiBaseUrl, env().visionJsonMode], ['gemma-4-26b-a4b-it', 'https://api.scaleway.ai/v1', true]);
   const gemini = env({ VISION_API_BASE_URL: 'https://generativelanguage.googleapis.com/v1beta/openai/', VISION_MODEL: 'gemini-x', VISION_JSON_MODE: 'false' });
   assertEquals([gemini.visionApiBaseUrl, gemini.visionModel, gemini.visionJsonMode], ['https://generativelanguage.googleapis.com/v1beta/openai', 'gemini-x', false]);
 });
@@ -206,6 +206,9 @@ Deno.test('validation : schémas et utilitaires', () => {
   assertEquals([54, 55, 69, 70].map(giCategory), ['low', 'medium', 'medium', 'high']);
   assertEquals(extractJson('Voici : {"a": 1} merci'), { a: 1 });
   assertEquals(normaliseLabel({ per100: { carbs: 12 } }).unit, 'g');
+  // Étiquette illisible : le modèle renvoie null partout, unité comprise.
+  assertEquals(normaliseLabel({ name: null, unit: null, servingQuantity: null, per100: { carbs: null, sugars: null, fiber: null, protein: null, fat: null } }).per100.carbs, null);
+  assertEquals(normalisePlate({ items: [{ name: 'Riz', estimatedQuantityG: 150, unit: null, carbsG: 40, carbsMinG: 30, carbsMaxG: 50 }] }).items[0]!.unit, 'g');
   let caught: unknown;
   try {
     normaliseLabel({ per100: { carbs: 250 } });
@@ -235,13 +238,13 @@ function capture(reply: unknown, status = 200) {
 const ASK: VisionRequest = { kind: 'label', system: PROMPTS.label, image: JPEG, mediaType: 'image/jpeg' };
 
 Deno.test('compatible OpenAI : image en data URL, mode JSON, message de correction au retry', async () => {
-  const config = env({ VISION_API_KEY: 'k', VISION_API_BASE_URL: 'https://llm.example/v1/' });
+  const config = env({ VISION_API_KEY: 'k', VISION_API_BASE_URL: 'https://llm.example/v1/', VISION_REASONING_EFFORT: 'none' });
   const { requests, impl } = capture({ choices: [{ message: { content: JSON.stringify(LABEL) } }] });
   const provider = createOpenAiProvider(config, impl);
   assertEquals(JSON.parse(await provider.ask({ ...ASK, retry: { previous: 'bof', error: 'per100.carbs: must be between 0 and 100' } })), LABEL);
   const { url, headers, body } = requests[0]!;
   assertEquals([url, headers.get('authorization')], ['https://llm.example/v1/chat/completions', 'Bearer k']);
-  assertEquals([body.response_format, body.max_tokens], [{ type: 'json_object' }, 4096]);
+  assertEquals([body.response_format, body.max_tokens, body.reasoning_effort], [{ type: 'json_object' }, 4096, 'none']);
   const messages = body.messages as { role: string; content: unknown }[];
   assertEquals(messages.map((m) => m.role), ['system', 'user', 'assistant', 'user']);
   assertMatch(String(messages[3]!.content), /per100\.carbs/);

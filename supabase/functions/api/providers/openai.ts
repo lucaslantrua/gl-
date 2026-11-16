@@ -29,6 +29,8 @@ export function createOpenAiProvider(config: Config, fetchImpl: typeof fetch = f
             // Marge pour les modèles qui raisonnent avant de répondre : leurs tokens de réflexion comptent dans ce plafond.
             max_tokens: 4096,
             ...(config.visionJsonMode ? { response_format: { type: 'json_object' } } : {}),
+            // « none » saute la phase de réflexion du modèle : bien plus rapide, un peu moins soigné.
+            ...(config.visionReasoningEffort ? { reasoning_effort: config.visionReasoningEffort } : {}),
           }),
           signal: AbortSignal.timeout(30_000),
         });
