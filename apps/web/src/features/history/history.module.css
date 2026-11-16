@@ -1,0 +1,34 @@
+.entryRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  box-shadow: var(--shadow-1);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.18s var(--ease-spring);
+}
+.entryRow:active {
+  transform: scale(0.98);
+}
+.entryName {
+  display: block;
+  font-weight: 700;
+}
+.entryMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.entryCarbs {
+  display: grid;
+  justify-items: end;
+  font-size: 1.15rem;
+  flex: none;
+}

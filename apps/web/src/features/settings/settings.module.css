@@ -1,0 +1,46 @@
+.split {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--s-2);
+}
+.splitCell {
+  display: grid;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.splitCell input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  text-align: center;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  font-weight: 700;
+}
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s-2);
+}
+.swatch {
+  aspect-ratio: 1.2;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sage-text);
+}
+.error {
+  color: var(--plum-text);
+}

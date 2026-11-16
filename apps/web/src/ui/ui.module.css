@@ -1,0 +1,394 @@
+/* ---------- Button ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 48px;
+  padding: 0 var(--s-5);
+  border: 0;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  transition: transform 0.18s var(--ease-spring), background 0.15s, box-shadow 0.15s;
+  user-select: none;
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.primary {
+  background: var(--cta);
+  color: var(--on-cta);
+  box-shadow: var(--shadow-1);
+}
+.soft {
+  background: var(--terracotta-wash);
+  color: var(--accent-text);
+}
+.ghost {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--line);
+}
+.danger {
+  background: var(--plum-wash);
+  color: var(--plum-text);
+}
+.sm {
+  min-height: 40px;
+  padding: 0 var(--s-4);
+  font-size: 0.9rem;
+}
+.full {
+  width: 100%;
+}
+.iconBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--glass);
+  color: var(--ink);
+  flex: none;
+  transition: transform 0.18s var(--ease-spring);
+}
+.iconBtn:active {
+  transform: scale(0.9);
+}
+.iconBtn:disabled {
+  opacity: 0.35;
+}
+
+/* ---------- Card ---------- */
+.card {
+  background: var(--paper);
+  border-radius: var(--r-lg);
+  padding: var(--s-5);
+  box-shadow: var(--shadow-1);
+}
+.cardFlat {
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.cardTight {
+  padding: var(--s-4);
+  border-radius: var(--r-md);
+}
+
+/* ---------- Chip / badges ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--r-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: var(--sunken);
+  color: var(--ink);
+}
+button.chip {
+  min-height: 40px;
+  padding: 0 16px;
+  font-size: 0.88rem;
+  transition: transform 0.18s var(--ease-spring), background 0.15s;
+}
+button.chip:active {
+  transform: scale(0.95);
+}
+.chipSelected {
+  background: var(--ink);
+  color: var(--cream);
+}
+.toneHoney {
+  background: var(--honey-wash);
+  color: var(--honey-text);
+}
+.toneSage {
+  background: var(--sage-wash);
+  color: var(--sage-text);
+}
+.tonePlum {
+  background: var(--plum-wash);
+  color: var(--plum-text);
+}
+.toneTerracotta {
+  background: var(--terracotta-wash);
+  color: var(--accent-text);
+}
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+.dotLow {
+  background: var(--sage);
+}
+.dotMedium {
+  background: var(--honey);
+}
+.dotHigh {
+  background: var(--plum);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.badgeEstimate {
+  background: var(--honey-wash);
+  color: var(--honey-text);
+}
+.badgeManufacturer {
+  background: var(--sage-wash);
+  color: var(--sage-text);
+}
+
+/* ---------- Slider ---------- */
+.slider {
+  display: grid;
+  gap: var(--s-2);
+}
+.sliderHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+.sliderValue {
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+.range {
+  --p: 50%;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 32px;
+  margin: 0;
+  background: transparent;
+  touch-action: pan-y;
+}
+.range::-webkit-slider-runnable-track {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--terracotta) var(--p), var(--sunken) var(--p));
+}
+.range::-moz-range-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--sunken);
+}
+.range::-moz-range-progress {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--terracotta);
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 3px solid var(--terracotta);
+  box-shadow: var(--shadow-1);
+}
+.range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 3px solid var(--terracotta);
+  box-shadow: var(--shadow-1);
+}
+
+/* ---------- Segmented ---------- */
+.segmented {
+  display: flex;
+  padding: 4px;
+  border-radius: var(--r-pill);
+  background: var(--sunken);
+  gap: 2px;
+}
+.segment {
+  position: relative;
+  flex: 1;
+  min-height: 40px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  transition: color 0.15s;
+}
+.segmentOn {
+  color: var(--ink);
+}
+.segmentPill {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  box-shadow: var(--shadow-1);
+}
+.segmentLabel {
+  position: relative;
+}
+
+/* ---------- Sheet ---------- */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(26, 21, 18, 0.5);
+}
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 61;
+  max-width: 560px;
+  max-height: 90dvh;
+  margin: 0 auto;
+  overflow-y: auto;
+  padding: var(--s-3) var(--s-5) calc(var(--s-5) + env(safe-area-inset-bottom));
+  background: var(--paper);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  box-shadow: var(--shadow-2);
+}
+.grabber {
+  width: 44px;
+  height: 5px;
+  margin: 0 auto var(--s-4);
+  border-radius: 999px;
+  background: var(--line);
+}
+.sheetTitle {
+  font-size: 1.35rem;
+  margin-bottom: var(--s-4);
+}
+
+/* ---------- Bottom bar ---------- */
+.bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: 1fr 1fr 84px 1fr 1fr;
+  align-items: center;
+  max-width: 560px;
+  margin: 0 auto;
+  height: calc(var(--bar-h) + env(safe-area-inset-bottom));
+  padding: 0 var(--s-2) env(safe-area-inset-bottom);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+.tab {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 8px 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-radius: var(--r-sm);
+}
+.tabOn {
+  color: var(--accent-text);
+}
+.fab {
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin-top: -30px;
+  border-radius: 50%;
+  background: var(--cta);
+  color: var(--on-cta);
+  box-shadow: var(--shadow-2), 0 0 0 6px var(--cream);
+  text-decoration: none;
+  transition: transform 0.2s var(--ease-spring);
+}
+.fab:active {
+  transform: scale(0.92);
+}
+
+/* ---------- Logo ---------- */
+.logo {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--ink);
+}
+.logoU {
+  height: 0.56em;
+  width: 0.53em;
+  margin-left: 0.03em;
+  overflow: visible;
+}
+.bubble {
+  animation: glou 2.8s ease-in infinite;
+  transform-origin: center;
+}
+@keyframes glou {
+  0% { transform: translateY(6px) scale(0.6); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: translateY(-12px) scale(1); opacity: 0; }
+}
+
+/* ---------- Field ---------- */
+.field {
+  display: grid;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 var(--s-4);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.input:focus-visible {
+  outline: none;
+  border-color: var(--terracotta);
+  box-shadow: 0 0 0 3px var(--terracotta-wash);
+}

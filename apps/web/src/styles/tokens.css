@@ -1,0 +1,78 @@
+/* Design tokens Glu. Palette de la spec (section 9) + dérivés pour l'accessibilité. */
+:root {
+  --cream: #f6efe4; /* fond clair */
+  --paper: #fffaf2; /* cartes */
+  --ink: #2b2420; /* texte */
+  --ink-soft: #6e625a;
+  --terracotta: #d2693c; /* accent principal (aplats, illustrations) */
+  --honey: #e8a93b; /* sucres, jauge */
+  --sage: #8ba888; /* IG bas, positif */
+  --plum: #8e4a5b; /* IG haut, alerte douce */
+  --line: #e6dccd;
+
+  /* Dérivés : versions assez contrastées pour porter du texte (WCAG AA). */
+  --cta: #b34e25; /* fond des CTA, texte --on-cta */
+  --on-cta: #fffaf2;
+  --accent-text: #a8461f; /* terracotta lisible sur cream/paper */
+  --honey-text: #85590a;
+  --sage-text: #47664a;
+  --plum-text: #8e4a5b;
+  --honey-wash: #fbeccb;
+  --sage-wash: #e2ecdf;
+  --plum-wash: #f1dde2;
+  --terracotta-wash: #f8e1d5;
+  --sunken: #efe6d8;
+  --glass: rgba(43, 36, 32, 0.06);
+  --focus: #2b2420;
+
+  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-text: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+
+  --r-sm: 12px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-pill: 999px;
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+
+  /* Ombres chaudes : teinte terracotta très diluée, jamais de gris froid. */
+  --shadow-1: 0 1px 2px rgba(178, 78, 37, 0.06), 0 4px 14px rgba(178, 78, 37, 0.07);
+  --shadow-2: 0 2px 4px rgba(178, 78, 37, 0.08), 0 14px 34px rgba(178, 78, 37, 0.14);
+
+  --bar-h: 72px;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --cream: #1a1512;
+  --paper: #241d19;
+  --ink: #f3e9dc;
+  --ink-soft: #a8998c;
+  --line: #3a2f28;
+
+  --cta: #d2693c;
+  --on-cta: #1a1512;
+  --accent-text: #ec9468;
+  --honey-text: #e8a93b;
+  --sage-text: #a3c0a0;
+  --plum-text: #dba0b0;
+  --honey-wash: #3d2f14;
+  --sage-wash: #263226;
+  --plum-wash: #3a232a;
+  --terracotta-wash: #40261a;
+  --sunken: #150f0d;
+  --glass: rgba(243, 233, 220, 0.07);
+  --focus: #f3e9dc;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.25);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.35), 0 14px 34px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
