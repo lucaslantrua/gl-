@@ -32,3 +32,156 @@
   font-size: 1.15rem;
   flex: none;
 }
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+.navLabel {
+  font-family: var(--font-display);
+  font-weight: 750;
+  font-size: 1.1rem;
+  text-align: center;
+  flex: 1;
+}
+.navLabel::first-letter {
+  text-transform: uppercase;
+}
+.chartCard {
+  touch-action: pan-y;
+  display: grid;
+  gap: var(--s-3);
+}
+.summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+.summaryNum {
+  font-size: 2rem;
+  line-height: 1;
+}
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+.axisText {
+  font-family: var(--font-text);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--ink-soft);
+}
+.bubble {
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-spring);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.bubble:hover,
+.bubble:focus-visible {
+  transform: scale(1.08);
+}
+.bubbleText {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 11px;
+  fill: #2b2420;
+  pointer-events: none;
+}
+.barHit {
+  cursor: pointer;
+  fill: transparent;
+}
+.barHit:hover,
+.barHit:focus-visible {
+  fill: var(--glass);
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+}
+.cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+.calHead {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+.calCell {
+  position: relative;
+  aspect-ratio: 1;
+  min-height: 40px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--sunken);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font-weight: 700;
+  font-size: 0.85rem;
+  overflow: hidden;
+}
+.calFill {
+  position: absolute;
+  inset: 0;
+  background: var(--honey);
+}
+.calNum {
+  position: relative;
+}
+.calOver {
+  box-shadow: inset 0 0 0 2.5px var(--plum);
+}
+.calToday .calNum {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.calCell:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.search {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 var(--s-4) 0 44px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  font-weight: 600;
+}
+.searchWrap {
+  position: relative;
+}
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-soft);
+  pointer-events: none;
+}
